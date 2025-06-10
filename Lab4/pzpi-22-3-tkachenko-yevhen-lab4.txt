@@ -1,0 +1,213 @@
+﻿ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+ФАКУЛЬТЕТ КОМП'ЮТЕРНИХ НАУК
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+ЗВІТ
+з лабораторної роботи №4
+з дисципліни «Архітектура програмного забезпечення»
+на тему: «РОЗРОБКА МОБІЛЬНОГО КЛІЄНТА СИСТЕМИ»
+
+
+
+
+Виконав 
+ст. гр. ПЗПІ-22-3 
+Ткаченко Євген Андрійович
+
+Перевірив 
+ст. викладач кафедри ПІ 
+Сокорчук Ігор Петрович
+
+
+
+
+
+
+ 
+Харків 2025
+1 ІСТОРІЯ ЗМІН
+
+№ ДатаВерсія звіту Опис змін та виправлень 1 01.06.20250.1 Створено розділ «Історія змін» 2 01.06.20250.1 Створено розділ «Завдання», Опис виконаної роботи» та «Висновки» 3 02.06.20250.1 Заповнено додаток Б з графічними матеріалами 4 02.06.20250.1 Заповнено додаток В з програмним кодом 5 02.06.20250.1 Наведено посилання на відеозапис. Заповнено додаток А. 
+2 ЗАВДАННЯ
+
+     Метою даного лабораторного заняття є розробка мобільної частини програмної системи.
+     
+3 ОПИС ВИКОНАНОЇ РОБОТИ
+
+     У рамках розробки лабораторної роботи було створено повноцінний Android-додаток для моніторингу підтягувань. Архітектура реалізована з використанням Jetpack Compose, MVVM-патерну, Dagger Hilt для DI та Retrofit + Gson для роботи з API.
+     Основні технології:
+• UI: Jetpack Compose + Material3
+• DI: Dagger Hilt
+• Networking: Retrofit + OkHttp + Gson
+• Архітектура: MVVM (ViewModel, Repositories, DTO, Screens)
+• Інші: LiveData, Kotlin Coroutines, Navigation
+     Структура проєкту:
+     Проєкт структуровано за принципами чистої архітектури:
+• data/api/ — опис API інтерфейсу (ApiService) та DTO-моделі (наприклад, UserDto, MetricDto)
+• repository/ — логіка звернень до API (UsersRepo, MetricsRepo, тощо)
+• presentation/ — екрани та ViewModel'і (SessionsScreen, MetricsScreen, AdminScreen)
+• di/ — модуль Hilt для ін'єкції залежностей (NetworkModule)
+• ui/ — стартова конфігурація додатку (MainActivity, App.kt)
+     Реалізований функціонал:
+• Реєстрація та вхід (LoginScreen, RegisterScreen)
+• Створення сесії тренування (SessionsScreen)
+• Автоматичне надсилання метрик підтягувань (через MetricsRepo)
+• Візуалізація графіків висоти та кута (ComposeLineChart.kt)
+• Отримання персональних рекомендацій (RecScreen.kt)
+Рекомендації по підтягуванням:
+• Генерація повідомлень на основі:
+o середньої висоти
+o кута нахилу
+o ритмічності
+o загальної техніки
+• Виведення детального тексту з порадами
+     Панель адміністратора (AdminScreen.kt):
+• Доступна лише для користувача з userId == 1
+• Перегляд усіх зареєстрованих користувачів (UsersRepo)
+• Можливість видалення користувачів (крім адміна)
+• Інтерфейс побудований на основі таблиці з інформацією про:
+o ID
+o ім’я
+o email
+o зріст
+o дата створення
+     Підключення до бекенду здійснюється через Retrofit-інтерфейс ApiService, що реалізує всі ендпоінти:
+• /auth
+• /sessions
+• /metrics
+• /recommendations
+• /users
+  Тестування:
+• Підключено бібліотеки для unit-тестування (JUnit)
+• Compose UI тестування (ui.test.junit4, ui.tooling.preview)
+• Тестовий маніфест (ui.test.manifest)
+     Приклади коду клієнтської частини наведені у додатку В, відеодемонстрацію роботи системи - у додатку А а рисунки у додатку Б.
+
+
+ВИСНОВКИ
+
+     Розробив мобільну частину програмної системи.
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+ДОДАТОК А
+Відеозапис
+     
+     Відеозапис презентації результатів лабораторної роботи: https://youtu.be/irH-4UMrgbM
+     
+     Хронологічний опис відеозапису:
+     00:00 Вітання 
+     01:28 Реєстрація 
+     02:00 Створення нового тренування
+     02:30 Адміністрування
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+ДОДАТОК Б 
+Графічні матеріали
+
+
+Рисунок Б.1 – ER-діаграма даних
+
+
+Рисунок Б.2 – Структура бази даних
+
+
+
+Рисунок Б.3 – UML-діаграма прецедентів
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК В 
+Програмний код
+
+     В.1 Адміністрування. Мобільна частина.
+     
+     GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab4/pzpi-22-3-tkachenko-yevhen-lab4/workout/app/src/main/java/com/example/workout/presentation/AdminScreen.kt
+     
+     1. 
+     2. package com.example.workout.presentation
+     3. 
+     4. import androidx.compose.foundation.layout.*
+     5. import androidx.compose.foundation.lazy.LazyColumn
+     6. import androidx.compose.foundation.lazy.items
+     7. import androidx.compose.material.icons.Icons
+     8. import androidx.compose.material.icons.filled.Delete
+     9. import androidx.compose.material3.*
+     10. import androidx.compose.runtime.*
+     11. import androidx.compose.ui.Modifier
+     12. import androidx.compose.ui.graphics.Color
+     13. import androidx.compose.ui.unit.dp
+     14. import androidx.lifecycle.viewmodel.compose.viewModel
+     15. import androidx.navigation.NavController
+     16. 
+     17. @OptIn(ExperimentalMaterial3Api::class)
+     18. @Composable
+     19. fun AdminScreen(nav: NavController, vm: UsersVM = viewModel()) {
+     20.     LaunchedEffect(Unit) { vm.load() }
+     21.     Scaffold(
+     22.         topBar = { TopAppBar(title = { Text("Admin") }) }
+     23.     ) { padding ->
+     24.         LazyColumn(contentPadding = padding) {
+     25.             items(vm.users) { u ->
+     26.                 ListItem(
+     27.                     headlineContent = { Text(u.username) },
+     28.                     supportingContent = { Text("#${u.userId} | ${u.email}") },
+     29.                     trailingContent = {
+     30.                         if (u.userId != 1L) IconButton(onClick = { vm.delete(u.userId) }) {
+     31.                             Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Red)
+     32.                         }
+     33.                     }
+     34.                 )
+     35.                 Divider()
+     36.             }
+     37.         }
+     38.     }
+     39. }
+2
+
+
