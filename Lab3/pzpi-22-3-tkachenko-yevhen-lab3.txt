@@ -30,7 +30,30 @@
 Харків 2025
 1 ІСТОРІЯ ЗМІН
 
-№ ДатаВерсія звіту Опис змін та виправлень 1 01.06.20250.1 Створено розділ «Історія змін» 2 01.06.20250.1 Створено розділ «Завдання», Опис виконаної роботи» та «Висновки» 3 02.06.20250.1 Заповнено додаток Б з графічними матеріалами 4 02.06.20250.1 Заповнено додаток В з програмним кодом 5 02.06.20250.1 Наведено посилання на відеозапис. Заповнено додаток А. 
+№ 
+Дата
+Версія звіту 
+Опис змін та виправлень 
+1 
+01.06.2025
+0.1 
+Створено розділ «Історія змін» 
+2 
+01.06.2025
+0.1 
+Створено розділ «Завдання», Опис виконаної роботи» та «Висновки» 
+3 
+02.06.2025
+0.1 
+Заповнено додаток Б з графічними матеріалами 
+4 
+02.06.2025
+0.1 
+Заповнено додаток В з програмним кодом 
+5 
+02.06.2025
+0.1 
+Наведено посилання на відеозапис. Заповнено додаток А. 
 2 ЗАВДАННЯ
 
      Метою даного лабораторного заняття є розробка клієнтської / front-end частини програмної системи.
@@ -131,7 +154,156 @@
 ДОДАТОК В 
 Програмний код
 
-     В.1 Адміністратор. Фронтенд частина.
+     В.1 Математична обробка прикладних даних
+     
+     GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab2/pzpi-22-3-tkachenko-yevhen-lab2/workout/src/main/java/com/tkachenko/yevhen/workout/service/impl/CorrectnessScoreCalculator.java
+     
+     1 def update_climate_settings(db: Session, shop_id: int):
+     2     animals = db.query(Animal).filter(Animal.shop_id == shop_id).all()
+     3     if animals:
+     4         temperatures = [float(a.temperature) for a in animals]
+     5         humidities = [float(a.humidity) for a in animals]
+     6         light_intensities = [float(a.light_intensity) for a in animals]
+     7         weights = [a.weight for a in animals]
+     8 
+     9         # Temperature: Weighted median
+     10         # Calculate the weighted average temperature
+     11         total_weight = sum(a.weight for a in animals)
+     12         if total_weight == 0:
+     13             weighted_median_temperature = 0  # Handle the case with no weight
+     14         else:
+     15             weighted_median_temperature = sum(a.temperature * a.weight for a in animals) / total_weight
+     16 
+     17 
+     18 
+     19         # Optimal humidity
+     20         humidities = [float(a. 1. package com.tkachenko.yevhen.workout.service.impl;
+     2. 
+     3. public class CorrectnessScoreCalculator {
+     4. 
+     5.     private static final float MAX_TILT_ANGLE = 15.0f;
+     6.     private static final float OPTIMAL_REP_TIME = 2.5f;
+     7.     private static final float HEIGHT_WEIGHT = 0.4f;
+     8.     private static final float TILT_ANGLE_WEIGHT = 0.3f;
+     9.     private static final float TIME_WEIGHT = 0.3f;
+     10. 
+     11.     public static float calculateCorrectnessScore(float actualHeight, float tiltAngle, int repNumber, float repTime, float userHeight) {
+     12. 
+     13.         float armLength = 0.4f * userHeight;
+     14. 
+     15.         float heightScore = calculateHeightScore(actualHeight, armLength);
+     16. 
+     17.         float tiltAngleScore = calculateTiltAngleScore(tiltAngle);
+     18. 
+     19.         float timeScore = calculateTimeScore(repTime);
+     20. 
+     21.         float correctnessScore = (HEIGHT_WEIGHT * heightScore)
+     22.                 + (TILT_ANGLE_WEIGHT * tiltAngleScore)
+     23.                 + (TIME_WEIGHT * timeScore);
+     24. 
+     25.         return Math.round(correctnessScore * 100) / 100.0f;
+     26.     }
+     27. 
+     28.     private static float calculateHeightScore(float actualHeight, float optimalHeight) {
+     29.         float difference = Math.abs(actualHeight - optimalHeight);
+     30.         return Math.max(0.0f, 1.0f - (difference / optimalHeight));
+     31.     }
+     32. 
+     33.     private static float calculateTiltAngleScore(float tiltAngle) {
+     34.         if (tiltAngle <= MAX_TILT_ANGLE) {
+     35.             return 1.0f;
+     36.         } else {
+     37.             float penalty = (tiltAngle - MAX_TILT_ANGLE) / MAX_TILT_ANGLE;
+     38.             return Math.max(0.0f, 1.0f - penalty);
+     39.         }
+     40.     }
+     41. 
+     42.     private static float calculateTimeScore(float repTime) {
+     43.         float deviation = Math.abs(repTime - OPTIMAL_REP_TIME);
+     44.         float maxDeviation = OPTIMAL_REP_TIME * 0.5f;
+     45.         if (deviation <= maxDeviation) {
+     46.             return 1.0f;
+     47.         } else {
+     48.             float penalty = deviation / maxDeviation;
+     49.             return Math.max(0.0f, 1.0f - penalty);
+     50.         }
+     51.     }
+     52. }
+     
+	В.2 Адміністрування бізнес-логіки системи 
+
+     GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab2/pzpi-22-3-tkachenko-yevhen-lab2/workout/src/main/java/com/tkachenko/yevhen/workout/controller/UserController.java
+     
+
+1. package com.tkachenko.yevhen.workout.controller;
+2. 
+3. import com.tkachenko.yevhen.workout.dto.UserDto;
+4. import com.tkachenko.yevhen.workout.service.UserService;
+5. import org.springframework.http.HttpStatus;
+6. import org.springframework.http.ResponseEntity;
+7. import org.springframework.web.bind.annotation.*;
+8. 
+9. import java.util.List;
+10. 
+11. @RestController
+12. @RequestMapping("/api/users")
+13. public class UserController {
+14. 
+15.     private final UserService userService;
+16. 
+17.     public UserController(UserService userService) {
+18.         this.userService = userService;
+19.     }
+20. 
+21.     @PostMapping
+22.     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+23.         UserDto savedUser = userService.createUser(userDto);
+24.         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+25.     }
+26. 
+27.     @GetMapping("{userId}")
+28.     public ResponseEntity<UserDto> getUserById(@PathVariable("userId") Long userId) {
+29.         UserDto userDto = userService.getUserById(userId);
+30.         return new ResponseEntity<>(userDto, HttpStatus.OK);
+31.     }
+32. 
+33.     @GetMapping()
+34.     public ResponseEntity<List<UserDto>> getAllUsers() {
+35.         List<UserDto> users = userService.getAllUsers();
+36.         return new ResponseEntity<>(users, HttpStatus.OK);
+37.     }
+38. 
+39.     @PutMapping("{userId}")
+40.     public ResponseEntity<UserDto> updateUser(
+41.             @PathVariable("userId") Long userId,
+42.             @RequestBody UserDto updatedDto) {
+43.         UserDto userDto = userService.updateUser(userId, updatedDto);
+44.         return new ResponseEntity<>(userDto, HttpStatus.OK);
+45.     }
+46. 
+47.     @DeleteMapping("{userId}")
+48.     public ResponseEntity<String> deleteUser(@PathVariable("userId") Long userId){
+49.         userService.deleteUser(userId);
+50.         return new ResponseEntity<>("User deleted successfully.",HttpStatus.OK);
+51.     }
+52. }
+
+	В.3 Резервне копіювання користувацьких даних 
+
+     GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab2/pzpi-22-3-tkachenko-yevhen-lab2/workout/src/main/java/com/tkachenko/yevhen/workout/repository/UserRepository.java
+
+1. package com.tkachenko.yevhen.workout.repository;
+2. 
+3. import com.tkachenko.yevhen.workout.entity.User;
+4. import org.springframework.data.jpa.repository.JpaRepository;
+5. 
+6. import java.util.Optional;
+7. 
+8. public interface UserRepository extends JpaRepository<User, Long> {
+9.     Optional<User> findByUsername(String username);
+10. }
+
+     В.4 Адміністратор. Фронтенд частина.
      
      GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab3/pzpi-22-3-tkachenko-yevhen-lab3/fitness-frontend/src/pages/AdminPage.vue
      

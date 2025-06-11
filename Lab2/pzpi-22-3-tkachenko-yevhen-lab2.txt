@@ -30,7 +30,30 @@
 Харків 2025
 1 ІСТОРІЯ ЗМІН
 
-№ ДатаВерсія звіту Опис змін та виправлень 1 01.06.20250.1 Створено розділ «Історія змін» 2 01.06.20250.1 Створено розділ «Завдання», Опис виконаної роботи» та «Висновки» 3 02.06.20250.1 Заповнено додаток Б з графічними матеріалами 4 02.06.20250.1 Заповнено додаток В з програмним кодом 5 02.06.20250.1 Наведено посилання на відеозапис. Заповнено додаток А. 
+№ 
+Дата
+Версія звіту 
+Опис змін та виправлень 
+1 
+01.06.2025
+0.1 
+Створено розділ «Історія змін» 
+2 
+01.06.2025
+0.1 
+Створено розділ «Завдання», Опис виконаної роботи» та «Висновки» 
+3 
+02.06.2025
+0.1 
+Заповнено додаток Б з графічними матеріалами 
+4 
+02.06.2025
+0.1 
+Заповнено додаток В з програмним кодом 
+5 
+02.06.2025
+0.1 
+Наведено посилання на відеозапис. Заповнено додаток А. 
 2 ЗАВДАННЯ
 
      Метою даного лабораторного заняття є втілення функцій бізнес логіки та функцій адміністрування системи.
@@ -129,7 +152,7 @@
 ДОДАТОК В 
 Програмний код
 
-     В.1 Математична обробка прикладних даних.
+     В.1 Математична обробка прикладних даних
      
      GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab2/pzpi-22-3-tkachenko-yevhen-lab2/workout/src/main/java/com/tkachenko/yevhen/workout/service/impl/CorrectnessScoreCalculator.java
      
@@ -205,7 +228,7 @@
      51.     }
      52. }
      
-	В.2 Адміністрування 
+	В.2 Адміністрування бізнес-логіки системи 
 
      GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab2/pzpi-22-3-tkachenko-yevhen-lab2/workout/src/main/java/com/tkachenko/yevhen/workout/controller/UserController.java
      
@@ -262,6 +285,19 @@
 50.         return new ResponseEntity<>("User deleted successfully.",HttpStatus.OK);
 51.     }
 52. }
-2
 
+	В.3 Резервне копіювання користувацьких даних 
+
+     GitHub репозиторій: https://github.com/NureTkachenkoYevhen/apz-pzpi-22-3-tkachenko-yevhen/blob/main/Lab2/pzpi-22-3-tkachenko-yevhen-lab2/workout/src/main/java/com/tkachenko/yevhen/workout/repository/UserRepository.java
+
+1. package com.tkachenko.yevhen.workout.repository;
+2. 
+3. import com.tkachenko.yevhen.workout.entity.User;
+4. import org.springframework.data.jpa.repository.JpaRepository;
+5. 
+6. import java.util.Optional;
+7. 
+8. public interface UserRepository extends JpaRepository<User, Long> {
+9.     Optional<User> findByUsername(String username);
+10. }
 
